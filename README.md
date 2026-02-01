@@ -33,3 +33,31 @@ Project: Pet-Project-wp
 └── Managed Services
     ├── RDS Instance [MySQL Engine]
     └── S3 Bucket [Media Storage]
+
+
+--------------------------------------
+доп информация визуализация параметров
+-----------------------------------------
+
+ project
+
+├── AWS Application Load Balance + Nginx Ingress
+
+
+│ ├── AWS EKS (Kubernetes)
+K8s Deployment (3 Replicas)
+                ├── 
+
+                 ├── Node A: Pod 1  2 vCPU / 4GB RAM, Pod 2  2 vCPU / 4GB RAM Spot instances -
+ t3.medium
+
+│ ├── 
+Node B: Pod 3
+2 vCPU / 4GB RAM Spot instances -t3.medium
+
+├── AWS S3 gp3 20GB
+
+├── AWS RDS 2 vCPU / 4GB RAM db.t3.medium
+
+               ├── MySQL
+
