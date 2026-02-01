@@ -15,6 +15,31 @@
 * **Database:** Managed AWS RDS (MySQL 8.0) в изолированной приватной сети.
 * **Storage:** AWS S3 для статических файлов WordPress.
 
+
+-------------------
+🛠 Технологии
+
+    Infrastructure as Code: Terraform
+
+    Cloud Provider: AWS
+
+    Orchestration: Kubernetes (EKS)
+
+    Database: RDS MySQL
+
+    CI/CD Ready: Структура подготовлена для автоматизации через GitHub Actions.
+
+📂 Структура проекта
+
+    terraform/: Код инфраструктуры, разбитый на модули (VPC, EKS, RDS, S3).
+
+    k8s/: Манифесты Kubernetes (Deployments, Services, Ingress).
+
+    terraform/providers.tf: Настройка AWS и удаленного S3 Backend для хранения стейта.
+
+
+
+    --------------
 ### Визуализация схемы:
 
 ```text
