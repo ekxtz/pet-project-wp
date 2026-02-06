@@ -9,7 +9,7 @@
 
     Кластер: AWS EKS (Kubernetes) v1.29+.
 
-    Ноды: 2 x t3.medium (2 vCPU, 4GB RAM).
+    Ноды: 3 x t3.medium (2 vCPU, 4GB RAM).
 
     Стратегия: Spot Instances (экономия до 70% бюджета).
 
