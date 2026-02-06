@@ -47,3 +47,31 @@ Plaintext
 │   ├── ingress.yaml         # Настройка ALB
 │   └── secrets.yaml         # Связь с Secrets Manager
 └── README.md                # Этот отчет
+
+
+
+--------------
+Актуальная структура проекта (1.1.правка).
+---------------
+
+pet-project-wp/
+├── k8s/
+│   ├── deployment.yaml      # Твой одностраничник (3 реплики)
+│   ├── service.yaml         # Внутренний балансировщик (ClusterIP)
+│   ├── ingress.yaml         # Настройка AWS ALB (через Load Balancer Controller)
+│   └── external-secret.yaml # [NEW] Манифест для связи K8s с Secrets Manager
+│
+├── terraform/
+│   ├── main.tf              
+│   ├── outputs.tf           
+│   ├── providers.tf         
+│   ├── variables.tf         
+│   └── modules/             # Все модули теперь внутри этой папки
+│       ├── vpc/             # Сеть (Public/Private subnets)
+│       ├── eks/             # Кластер + Spot-ноды + LB Controller IAM roles
+│       ├── rds/             # PostgreSQL + EBS gp3 storage
+│       ├── s3/              # Хранилище для статики
+│       └── secrets/         # [NEW] Модуль для AWS Secrets Manager
+│
+├── .gitignore               # Игнорируем .terraform, tfstate и секреты
+└── README.md                # Схема архитектуры и описание
