@@ -36,7 +36,6 @@
 
    🛠 Структура   Git-репозитория
 Plaintext
-
 .
 ├── terraform/               # Инфраструктура (IaC)
 │   ├── modules/             # VPC, EKS, RDS, S3, SecretsManager
