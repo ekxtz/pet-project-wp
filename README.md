@@ -1,88 +1,49 @@
 # pet-project-wp
+1. Уровень трафика (Ingress)
+
+    AWS Application Load Balancer (ALB): Единственная точка входа из интернета.
+
+    Контроллер: AWS Load Balancer Controller (внутри EKS), который автоматически управляет ALB.
+
+2. Вычислительный слой (Compute)
+
+    Кластер: AWS EKS (Kubernetes) v1.29+.
+
+    Ноды: 2 x t3.medium (2 vCPU, 4GB RAM).
+
+    Стратегия: Spot Instances (экономия до 70% бюджета).
+
+    Приложение: Одностраничник (Tailwind/Static) в Deployment (3 реплики).
+
+    Тип развертывания: Stateless (никаких StatefulSet, всё максимально гибко).
+
+3. Слой данных (Storage & DB)
+
+    База данных: RDS PostgreSQL.
+
+        Инстанс: db.t3.medium.
+
+        Диск: 20GB gp3 (быстрое блочное хранилище для таблиц).
+
+    Файлы: AWS S3 (объектное хранилище). Здесь лежат картинки и статика, чтобы Поды оставались легкими.
+
+4. Безопасность (Security)
+
+    Сеть: VPC с разделением на Public (для ALB) и Private (для Нод и Базы) подсети.
+
+    Секреты: AWS Secrets Manager. Пароль от базы генерируется Terraform и передается в EKS через External Secrets Operator.
 
 
-# AWS EKS + WordPress High Availability Project
+   🛠 Структура   Git-репозитория
+Plaintext
 
-Это проект по развертыванию отказоустойчивой архитектуры WordPress в облаке AWS с использованием Terraform и Kubernetes.
-
-## 🏗 Архитектура
-
-Проект реализует современный стек технологий с фокусом на безопасность и экономию средств:
-
-* **Networking:** VPC с публичными и приватными подсетями.
-* **Load Balancing:** AWS Application Load Balancer (ALB) + Nginx Ingress Controller.
-* **Compute:** AWS EKS (Kubernetes) на базе **Spot-инстансов (t3.medium)** для экономии бюджета до 70%.
-* **Database:** Managed AWS RDS (MySQL 8.0) в изолированной приватной сети.
-* **Storage:** AWS S3 для статических файлов WordPress.
-
-
--------------------
-🛠 Технологии
-
-    Infrastructure as Code: Terraform
-
-    Cloud Provider: AWS
-
-    Orchestration: Kubernetes (EKS)
-
-    Database: RDS MySQL
-
-    CI/CD Ready: Структура подготовлена для автоматизации через GitHub Actions.
-
-📂 Структура проекта
-
-    terraform/: Код инфраструктуры, разбитый на модули (VPC, EKS, RDS, S3).
-
-    k8s/: Манифесты Kubernetes (Deployments, Services, Ingress).
-
-    terraform/providers.tf: Настройка AWS и удаленного S3 Backend для хранения стейта.
-
-
-
-    --------------
-### Визуализация схемы:
-
-```text
-Project: Pet-Project-wp
-│
-├── VPC (Virtual Private Cloud) 
-│   ├── Public Subnet (ALB) 
-│   └── Private Subnet (EKS Nodes & RDS)
-│
-├── EKS Cluster (Control Plane)
-│   ├── Managed Node Group (Spot t3.medium)
-│   │   ├── Node A [Pod 1, Pod 2]
-│   │   └── Node B [Pod 3]
-│   └── K8s Services [Nginx Ingress]
-│
-└── Managed Services
-    ├── RDS Instance [MySQL Engine]
-    └── S3 Bucket [Media Storage]
-
-
---------------------------------------
-доп информация визуализация параметров
------------------------------------------
-
- project
-
-├── AWS Application Load Balance + Nginx Ingress
-
-
-│ ├── AWS EKS (Kubernetes)
-K8s Deployment (3 Replicas)
-                ├── 
-
-                 ├── Node A: Pod 1  2 vCPU / 4GB RAM, Pod 2  2 vCPU / 4GB RAM Spot instances -
- t3.medium
-
-│ ├── 
-Node B: Pod 3
-2 vCPU / 4GB RAM Spot instances -t3.medium
-
-├── AWS S3 gp3 20GB
-
-├── AWS RDS 2 vCPU / 4GB RAM db.t3.medium
-
-               ├── MySQL
-
+.
+├── terraform/               # Инфраструктура (IaC)
+│   ├── modules/             # VPC, EKS, RDS, S3, SecretsManager
+│   ├── main.tf              # Вызов всех модулей
+│   └── providers.tf         # Настройка AWS + S3 Backend
+├── k8s/                     # Манифесты Kubernetes
+│   ├── deployment.yaml      # Сайт (3 реплики)
+│   ├── ingress.yaml         # Настройка ALB
+│   └── secrets.yaml         # Связь с Secrets Manager
+└── README.md                # Этот отчет
